@@ -28,8 +28,6 @@ void read_button(int button);
 const char* ssid     = "Cleverson";
 const char* password = "tesla32020";
 
-bool before_button;
-
 Espalexa espalexa;
 EspalexaDevice* device3; 
 
@@ -64,14 +62,8 @@ void setup(){
   }
   */
 
-  Serial.print("Light state: ");
-  Serial.print(light.get_state_light());
-  Serial.println();
-
   pinMode(button, INPUT_PULLUP);
   pinMode(lightPin, OUTPUT);
-
-  before_button = digitalRead(button);
 
 }
  
