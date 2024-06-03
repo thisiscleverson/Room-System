@@ -4,23 +4,24 @@
 #include <Adafruit_NeoPixel.h>
 #include <connectWifi/connectWifi.h>
 
-#include <light.h>
+#include <LightController.h>
+#include <EffectsController.h>
 #include <button.h> 
 
 const int button = 19; // pino para o botão
+int ledyellow = 9; //tirar no codigo final
 
-#define PIN 4 
-
+#define pinStripLed 4 
 #define lightPin 18
+#define sensor 5
+
+
+Adafruit_NeoPixel pixels = Adafruit_NeoPixel(30, pinStripLed, NEO_GRB + NEO_KHZ800);
 
 LightController light = LightController(lightPin);
+EffectsController effects = EffectsController(pixels);
 
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(30, PIN, NEO_GRB + NEO_KHZ800);
 
-//callback functions
-void firstLightChanged(uint8_t brightness);
-void secondLightChanged(uint8_t brightness);
-void thirdLightChanged(uint8_t brightness);
 void led(uint8_t brightness, uint32_t rgb);
 void read_button(int button);
 
@@ -31,27 +32,19 @@ const char* password = "tesla32020";
 Espalexa espalexa;
 EspalexaDevice* device3; 
 
+int beforeSensor;
+
 void setup(){
 
   //pixels.begin();  
   Serial.begin(115200);
 
-  /*
+  
   bool wifiConnected = connectWifi(ssid, password);
   
   if(wifiConnected){
-    
     // Define your devices here. 
-    espalexa.addDevice("Light 1", firstLightChanged); 
-    espalexa.addDevice("Light 2", secondLightChanged, 255); 
-    
-    device3 = new EspalexaDevice("Light 3", thirdLightChanged); 
-    espalexa.addDevice(device3); 
-    device3->setValue(128); 
-
-    espalexa.addDevice("led3", led); 
-
-
+    espalexa.addDevice("fita de led", led, 255); 
     espalexa.begin();
     
   } else{
@@ -60,43 +53,32 @@ void setup(){
       delay(2500);
     }
   }
-  */
+
 
   pinMode(button, INPUT_PULLUP);
+  pinMode(sensor, INPUT);
   pinMode(lightPin, OUTPUT);
 
+  pinMode(ledyellow, OUTPUT); // <-- tirar no codigo final//
+
+  beforeSensor = digitalRead(sensor);
 }
  
-void loop()
-{
-  //espalexa.loop();
+void loop(){
   read_button(button);
+
+  if(digitalRead(sensor) == HIGH && beforeSensor == LOW){
+    Serial.println("Sensor Touch!");
+    effects.nextEffect();
+  }
+
+  beforeSensor = digitalRead(sensor);
+
+  espalexa.loop();
+  effects.loop();
+
 }
 
-//our callback functions
-void firstLightChanged(uint8_t brightness) {
-    Serial.print("Device 1 changed to ");
-    
-    //do what you need to do here
-
-    //EXAMPLE
-    if (brightness) {
-      Serial.print("ON, brightness ");
-      Serial.println(brightness);
-    }
-    else  {
-      Serial.println("OFF");
-    }
-}
-
-void secondLightChanged(uint8_t brightness) {
-  Serial.println("Device 2 changed to ");
-  Serial.println(brightness);
-}
-
-void thirdLightChanged(uint8_t brightness) {
-  //do what you need to do here
-}
 
 void led(uint8_t brightness, uint32_t rgb){
   int red,green,blue;
@@ -106,9 +88,6 @@ void led(uint8_t brightness, uint32_t rgb){
   blue  = ((rgb & 0xFF));
 
   pixels.setBrightness(brightness);
-  pixels.show();
-  for(int  i=0; i < pixels.numPixels(); i++){
-      pixels.setPixelColor(i,pixels.Color(red,green,blue));
-      pixels.show();
-  }
+  effects.setColor(pixels.Color(red,green,blue));
+
 }
