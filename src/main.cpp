@@ -1,71 +1,63 @@
 #include <Arduino.h>
-
 #include <Espalexa.h>
 #include <Adafruit_NeoPixel.h>
-#include <connectWifi/connectWifi.h>
 
+
+// modulos
+#include <connectWifi.h>
 #include <LightController.h>
 #include <EffectsController.h>
-#include <button.h> 
+#include <ButtonHandler.h>
 
-const int button = 19; // pino para o botão
-int ledyellow = 9; //tirar no codigo final
 
+#define buttonPin   19
 #define pinStripLed 4 
-#define lightPin 18
-#define sensor 5
+#define lightPin    18
+#define sensor      5
 
 
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(30, pinStripLed, NEO_GRB + NEO_KHZ800);
-
-LightController light = LightController(lightPin);
-EffectsController effects = EffectsController(pixels);
+Espalexa espalexa;
 
 
-void led(uint8_t brightness, uint32_t rgb);
-void read_button(int button);
+LightController   light(lightPin);
+EffectsController effects(pixels);
+ButtonHandler     buttonHandler(buttonPin, light);
 
-// Change this!!
+
 const char* ssid     = "Cleverson";
 const char* password = "tesla32020";
 
-Espalexa espalexa;
-EspalexaDevice* device3; 
-
 int beforeSensor;
+
+
+void led(uint8_t brightness, uint32_t rgb);
+
 
 void setup(){
 
-  //pixels.begin();  
+  pixels.begin();
+  buttonHandler.begin();
   Serial.begin(115200);
 
   
   bool wifiConnected = connectWifi(ssid, password);
-  
   if(wifiConnected){
     // Define your devices here. 
     espalexa.addDevice("fita de led", led, 255); 
     espalexa.begin();
     
   } else{
-    while (true){
-      Serial.println("Cannot connect to WiFi. Please check data and reset the ESP.");
-      delay(2500);
-    }
+    Serial.println("Cannot connect to WiFi. Please check data and reset the ESP.");
   }
 
 
-  pinMode(button, INPUT_PULLUP);
   pinMode(sensor, INPUT);
-  pinMode(lightPin, OUTPUT);
-
-  pinMode(ledyellow, OUTPUT); // <-- tirar no codigo final//
-
   beforeSensor = digitalRead(sensor);
 }
  
 void loop(){
-  read_button(button);
+  buttonHandler.readButton();
 
   if(digitalRead(sensor) == HIGH && beforeSensor == LOW){
     Serial.println("Sensor Touch!");

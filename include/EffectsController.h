@@ -32,14 +32,16 @@ class EffectsController{
 
       // private method
       void resertColorWipeIndex();
+      void setPixelHeatColor(int pixel, byte temperature);
       uint32_t getNextHueColor();
       
       // effects
-      void colorWipe(int wait);
-      void rainbow(int wait);
-      void theaterChase(int wait);
-      void colorRange(int wait);
-      void breathingOfColors(int wait);
+      void colorWipe(int speedDelay);
+      void rainbow(int speedDelay);
+      void theaterChase(int speedDelay);
+      void colorRange(int speedDelay);
+      void breathingOfColors(int speedDelay);
+      void fireEffect(int cooling, int sparking, int speedDelay);
 };
 
 #endif

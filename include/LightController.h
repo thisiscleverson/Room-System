@@ -17,7 +17,6 @@ class LightController {
 
    protected:
       int pin;
-
 };
 
 #endif // LIGHTCONTROLLER_H

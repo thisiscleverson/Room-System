@@ -1,6 +1,5 @@
 .pio
 .vscode/
 lib/
-include/
 test/
 build/

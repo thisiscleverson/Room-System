@@ -1,6 +1,5 @@
 #include <Arduino.h>
-
-#include "connectWifi.h"
+#include <connectWifi.h>
 
 #ifdef ARDUINO_ARCH_ESP32
 #include <WiFi.h>
@@ -18,7 +17,7 @@ boolean connectWifi(const char* ssid, const char* password){
    Serial.println("\nConnecting to WiFi");
 
    // Wait for connection
-   Serial.print("Connecting...");
+   Serial.print("Connecting ");
 
    while (WiFi.status() != WL_CONNECTED) {
       static int i = 0;
