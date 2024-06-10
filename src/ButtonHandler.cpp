@@ -1,5 +1,8 @@
 #include <Arduino.h>
 #include <ButtonHandler.h>
+#include <IRController.h>
+
+extern IRController IR;
 
 ButtonHandler::ButtonHandler(int pin, LightController& light) : buttonPin(pin), light(light) {}
 
@@ -30,7 +33,7 @@ void ButtonHandler::readButton(){
 
    if (buttonState == LOW && !longPressActive && (millis() - buttonHoldTime) >= longPressTime) {
       longPressActive = true;
-      Serial.println("Ar condicionado!");
+      IR.sendIRCommand(1);
    }
 
    lastButtonState = buttonReading;
