@@ -12,8 +12,6 @@ EffectsController::EffectsController(Adafruit_NeoPixel& neoPixel) : NeoPixel(neo
 
 //effects
 void EffectsController::colorWipe(int speedDelay){
-   //static int i = 0;
-
    if(delayChecker.checkDelay(speedDelay)){
       if(colorWipeIndex < NeoPixel.numPixels()){
          NeoPixel.setPixelColor(colorWipeIndex, color); 

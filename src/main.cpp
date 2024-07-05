@@ -17,12 +17,12 @@
 #define buttonPin   19
 #define pinStripLed 4 
 #define lightPin    18
-#define sensor      5
-#define IRsensorPin 8
+#define touchSensor 5
+#define IRsensorPin 6
 
 
 Adafruit_NeoPixel pixels(30, pinStripLed, NEO_GRB + NEO_KHZ800);
-IRsend IRsensor(IRsensorPin);
+IRsend IRsensor(IRsensorPin); // pertence a biblioteca IRsend e o objeto IRsensor será injetada dentro do IRController
 Espalexa espalexa;
 
 
@@ -41,13 +41,14 @@ void setup(){
   pixels.begin();
   IRsensor.begin(); 
   buttonHandler.begin();
+  light.begin();
   Serial.begin(115200);
 
   
   bool wifiConnected = connectWifi(ssid, password);
   if(wifiConnected){
-    // Define your devices here. 
-    espalexa.addDevice("Lampada", lightState, 0); 
+   
+    espalexa.addDevice("Light", lightState); 
     espalexa.addDevice("fita de led", stripLed, 255); 
     espalexa.addDevice("ar condicionado", activateAirConditioning); 
     espalexa.addDevice("temperatura 18", activateTemp18);
@@ -60,19 +61,19 @@ void setup(){
   }
 
 
-  pinMode(sensor, INPUT);
-  beforeSensor = digitalRead(sensor);
+  pinMode(touchSensor, INPUT);
+  beforeSensor = digitalRead(touchSensor);
 }
  
 void loop(){
   buttonHandler.readButton();
 
-  if(digitalRead(sensor) == HIGH && beforeSensor == LOW){
-    Serial.println("Sensor Touch!");
+  if(digitalRead(touchSensor) == HIGH && beforeSensor == LOW){
     effects.nextEffect();
+    delay(50);
   }
 
-  beforeSensor = digitalRead(sensor);
+  beforeSensor = digitalRead(touchSensor);
 
   espalexa.loop();
   effects.loop();

@@ -21,7 +21,7 @@ void ButtonHandler::readButton(){
       if (buttonReading != buttonState) {
          buttonState = buttonReading;
          if (buttonState == HIGH && !longPressActive) {
-            //Serial.println("Luz alternada");
+            
             bool stateLight = light.get_state_light();
             light.set_state_light(!stateLight);
          } else {
@@ -32,6 +32,7 @@ void ButtonHandler::readButton(){
    }
 
    if (buttonState == LOW && !longPressActive && (millis() - buttonHoldTime) >= longPressTime) {
+      Serial.println("IR");
       longPressActive = true;
       IR.sendIRCommand(1);
    }
