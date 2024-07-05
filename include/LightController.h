@@ -8,7 +8,19 @@ class LightController {
       LightController(int lightPin);
       
       void begin(void);
+
+      /**
+      * função para modificar o estado da lampada.
+      * @param `state` deve ser do tipo `boolean`. 
+      * `true` para ligado e `false` para desligado.
+      */
       void set_state_light(bool state);
+
+      /**
+      * função para retornar o estado da lampada.
+      * 
+      * @return `true` para ligado e `false`para desligado. 
+      */
       bool get_state_light();
 
    private:

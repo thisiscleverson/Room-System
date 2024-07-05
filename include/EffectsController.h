@@ -5,8 +5,8 @@
 
 class EffectsController{
    public:
-      /*!
-       @brief Construtor da classe EffectsController.
+     /**
+      * @brief Construtor da classe EffectsController.
       * 
       * Este construtor inicializa a classe com uma referência a um objeto
       * Adafruit_NeoPixel, que é usado para controlar o strip de LEDs.
@@ -18,8 +18,39 @@ class EffectsController{
       */
       EffectsController(Adafruit_NeoPixel& neoPixel);
       
+
+      /**
+      * @brief Define a cor dos LEDs.
+      * 
+      * Esta função define a cor de todos os LEDs da fita para a cor especificada.
+      * 
+      * @param color A cor a ser definida, representada como um valor de 32 bits no formato RGB (8 bits para cada canal de cor: vermelho, verde e azul).
+      * 
+      * Exemplo de uso:
+      * 
+      * @code
+      *  uint32_t red = 0xFF0000;  // Cor vermelha
+      *  setColor(red);            // Define todos os LEDs para vermelho
+      * @endcode
+      */
       void setColor(uint32_t color);
+      
+      /**
+       * @brief Controla a transição entre diferentes efeitos de iluminação.
+       * 
+       * Esta função é responsável por alternar entre os seguintes efeitos de iluminação:
+       * 
+       * - `colorWipe`: Um efeito de limpeza de cor.
+       * - `rainbow`: Um efeito de arco-íris.
+       * - `theaterChase`: Um efeito de perseguição no estilo teatro.
+       * - `colorRange`: Um efeito que exibe uma gama de cores.
+       * - `breathingOfColors`: Um efeito de cores pulsantes.
+       * - `fireEffect`: Um efeito que simula chamas.
+       * 
+       * @note Chame esta função para passar ao próximo efeito na sequência.
+       */
       void nextEffect();
+      
       void loop();
    
    private:

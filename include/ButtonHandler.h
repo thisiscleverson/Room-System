@@ -21,7 +21,7 @@ class ButtonHandler {
 
       bool buttonState;
       bool lastButtonState;
-      bool longPressActive = false;
+      bool longPressActive = true;
 };
 
 #endif
