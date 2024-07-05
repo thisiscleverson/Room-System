@@ -10,6 +10,7 @@ void ButtonHandler::begin(){
    pinMode(buttonPin, INPUT_PULLUP);
 }
 
+//TODO: separar responsabilidades em outros metodos
 void ButtonHandler::readButton(){
    int buttonReading = digitalRead(buttonPin);
 
@@ -31,8 +32,8 @@ void ButtonHandler::readButton(){
       }
    }
 
+   // reponsavel por ligar o ar condicionado. Quando o botão for apertado e mantido por 1s, o comando IR sera acionado.
    if (buttonState == LOW && !longPressActive && (millis() - buttonHoldTime) >= longPressTime) {
-      Serial.println("IR");
       longPressActive = true;
       IR.sendIRCommand(1);
    }

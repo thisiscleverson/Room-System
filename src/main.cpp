@@ -12,13 +12,18 @@
 #include <ButtonHandler.h>
 #include <IRController.h>
 #include <DeviceFunctions.h>
+#include <ReadButtonNextEffect.h>
 
 
-#define buttonPin   19
-#define pinStripLed 4 
-#define lightPin    18
-#define touchSensor 5
-#define IRsensorPin 6
+#define buttonPin        19
+#define pinStripLed      4 
+#define lightPin         18
+#define buttonNextEffect 5
+#define IRsensorPin      6
+
+
+const char* ssid     = "SSID";
+const char* password = "SENHA";
 
 
 Adafruit_NeoPixel pixels(30, pinStripLed, NEO_GRB + NEO_KHZ800);
@@ -31,10 +36,7 @@ LightController   light(lightPin);
 EffectsController effects(pixels);
 ButtonHandler     buttonHandler(buttonPin, light);
 
-const char* ssid     = "Cleverson";
-const char* password = "tesla32020";
 
-int beforeSensor;
 
 void setup(){
 
@@ -61,19 +63,13 @@ void setup(){
   }
 
 
-  pinMode(touchSensor, INPUT);
-  beforeSensor = digitalRead(touchSensor);
+  pinMode(buttonNextEffect, INPUT_PULLUP);
 }
  
 void loop(){
   buttonHandler.readButton();
 
-  if(digitalRead(touchSensor) == HIGH && beforeSensor == LOW){
-    effects.nextEffect();
-    delay(50);
-  }
-
-  beforeSensor = digitalRead(touchSensor);
+  readButtonNextEffet(buttonNextEffect, effects);
 
   espalexa.loop();
   effects.loop();
